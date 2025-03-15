@@ -6,7 +6,7 @@ typedef struct {
     int value;
 } Card;
 
-void shuffle(Card *deck, int size); // deck 은 배열이니까 포인터로로
+void shuffle(Card *deck, int size); // deck 은 배열이니까 포인터로
 int main(void)
 {
     Card deck[52];

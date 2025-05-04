@@ -35,11 +35,11 @@ int main(void)
 
     // printf("문자를 입력하세요: ");
     // ch = getchar(); // 문자 입력
-    // getchar(); // 버퍼 비우기기
+    // getchar(); // 버퍼 비우기
     // printf("%c",ch);
 
     int n1 =3, n2 = 4;
-    double diresult;
+    float diresult;
     diresult = (double)n1/n2; // 3.0/4 -> 실수가 바이트 큼 따라서 실수 연산으로 바뀜 3.0/4.0 으로!
     printf("나눗셈 결과:%f",diresult); 
     return 0;

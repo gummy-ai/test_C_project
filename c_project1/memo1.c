@@ -1,64 +1,91 @@
 #include <stdio.h>
-#include <stdlib.h> // atoi(), atof() 사용을 위해 필요
-#include <ctype.h>  // isdigit() 사용을 위해 필요
-#include <string.h> // strlen() 사용을 위해 필요
-
-#define SUBJECTS 5
-
-int is_valid_number(const char *str) {
-    // 빈 문자열이면 무효
-    if (str[0] == '\0') return 0;
-
-    int dot_count = 0;
-    for (int i = 0; str[i] != '\0'; i++) {
-        if (str[i] == '.') {
-            dot_count++;
-            if (dot_count > 1) return 0;  // 소수점이 1개 이상이면 무효
-        } else if (!isdigit(str[i])) {
-            return 0;  // 숫자가 아니면 무효
-        }
-    }
-    return 1;
-}
-
+#include <stdlib.h>
+#include <time.h>
+// global_val
+int arr_animal[4][5] = -1; // 뒷면을 -1로 표시
+int check_animal[4][5] = 0; // 앞면을 0으로 표시 , 1 이면 뒷면으로 생각?
+char *str_animal[10] = {
+    "하마",
+    "끼리코",
+    "나무늘보",
+    "사자",
+    "호랑이",
+    "고릴라",
+    "원숭이",
+    "타잔",
+    "심장",
+    "핏줄"
+};
+// my_func
+void printQuestion(); // 현재 카드 상황을 보여주기
+void shuffle_animal(); // (비어있는) randpos 얻고 랜덤하게 배치
+int getemptyposition(); // -1(뒷면)인 위치를 얻는 함수
+int conv_pos_x(int num);
+int conv_pos_y(int num);
+//main-------------------------------
 int main(void)
 {
-    int array[SUBJECTS] = {0};
-    char input[100];  // 사용자 입력을 문자열로 받기 위한 버퍼
-
-    printf("5과목의 점수를 각각 입력하세요 (0~100 사이의 정수):\n");
-
-    for (int i = 0; i < SUBJECTS; i++)
-    {
-        while (1) {
-            printf("%d 번째 과목 점수: ", i + 1);
-            scanf("%s", input); // 문자열로 입력 받음
-            
-            if (!is_valid_number(input)) {
-                printf("?? 0~100 사이의 정수를 입력하세요.\n");
-                continue;
-            }
-
-            int answer = atoi(input); // 문자열을 정수로 변환
-
-            if (answer < 0 || answer > 100) {
-                printf("?? 0~100 사이의 정수를 입력하세요.\n");
-                continue;
-            }
-
-            array[i] = answer;
-            break; // 유효한 값 입력 시 루프 종료
-        }
-    }
-
-    float sum = 0.0f;
-    for (int i = 0; i < SUBJECTS; i++)
-    {
-        sum += array[i];
-    }
-
-    printf("총점은 %.2f 입니다.\n", sum);
-    printf("평균은 %.2f 입니다.\n", sum / SUBJECTS);
+    // 카드 뒤집기 게임
+    srand(time(NULL));
+    
 
     return 0;
+}
+// 정의
+void printQuestion() 
+{
+    printf("----game start----\n\n");
+    int seq = 0;
+    for (int i = 0; i<4; i++)
+    {
+        for (int j=0; j<5; j++)
+        {
+            if (check_animal[i][j] == 1) // 앞면:1 일 경우
+            {
+                printf("8s",str_animal[arr_animal[i][j]]);
+            }
+            else // 뒷면:-1 일 경우 숫자 0으로 감추기기
+            {
+                printf("%8d",seq);
+            }
+        }
+        seq++;
+        printf("\n");
+    }
+    printf("\n");
+
+}
+void shuffle_animal() 
+{
+    for (int i = 0; i< 10; i++) // 0-9 까지한 이유는 stranimal 이 0-9니까
+    {
+        for (int j = 0; j<2; j++)
+        {
+            int pos = getemptyposition();
+            int x = conv_pos_x(pos);
+            int y = conv_pos_y(pos);
+            arr_animal[x][y] = i; // 이제 더이상 -1이 아님
+        }
+    }
+}
+int getemptyposition() 
+{   
+    while (1)
+    {
+        int rand_pos = rand() % 20;
+        int x = conv_pos_x(rand_pos);
+        int y = conv_pos_y(rand_pos);
+        if (arr_animal[x][y] == -1)
+        {
+            return rand_pos;
+        }
+    }
+}
+int conv_pos_x(int num)
+{
+    return num / 5;
+}
+int conv_pos_y(int num)
+{
+    return num % 5;
 }
